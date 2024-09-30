@@ -21,7 +21,6 @@
           <span class="bi bi-plus-lg"></span>
         </button>
       </div>
-
       <CadastroServicos
         v-if="isModalVisible"
         @close="closeModal"
