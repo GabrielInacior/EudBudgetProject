@@ -16,6 +16,7 @@ export default class GastoRepository {
 
   static async createGasto(data: {
     nome: string;
+    descricao: string;
     valor: number;
     data: Date;
   }): Promise<GastoEntity> {
@@ -27,7 +28,7 @@ export default class GastoRepository {
 
   static async updateGasto(
     id: number,
-    data: { nome?: string; valor?: number; data?: Date }
+    data: { nome?: string; descricao?: string; valor?: number; data?: Date }
   ): Promise<GastoEntity | null> {
     const gasto = await prisma.gasto.update({
       where: { id },

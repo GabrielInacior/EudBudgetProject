@@ -1,62 +1,135 @@
-/* color palette */
 :root {
     --vt-c-white: #ffffff;
     --vt-c-white-soft: #f8f8f8;
     --vt-c-white-mute: #f2f2f2;
-
+    --gasto-color: #e60000;
+    --lucro-color: #588d35;
     --vt-c-black: #181818;
     --vt-c-black-soft: #222222;
     --vt-c-black-mute: #282828;
-
     --vt-c-indigo: #2c3e50;
-
     --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
     --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
     --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
     --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-    /* Custom color palette */
+    --color-background-soft-dark: #222222;
     --color-primary: #6290c3;
-    /* Silver Lake Blue */
     --color-secondary: #c2e7da;
-    /* Mint Green */
     --color-accent: #f1ffe7;
-    /* Honeydew */
     --color-dark: #1a1b41;
-    /* Space Cadet */
     --color-light: #baff29;
-    /* Lime */
-
-    --color-background: var(--color-primary);
+    --color-input-background: var(--vt-c-white);
+    --color-input-background-dark: var(--vt-c-black-soft);
+    --color-background: var(--vt-c-white);
     --color-text: var(--vt-c-indigo);
-    /* or any other suitable text color */
 }
 
-/* semantic color variables for this project */
 :root {
     --color-background-soft: var(--vt-c-white-soft);
     --color-background-mute: var(--vt-c-white-mute);
-
     --color-border: var(--vt-c-divider-light-2);
     --color-border-hover: var(--vt-c-divider-light-1);
-
     --color-heading: var(--color-primary);
-    --color-text: var(--vt-c-text-light-1);
+}
 
-    --section-gap: 160px;
+.dark-theme {
+    --color-background: var(--vt-c-black);
+    --color-text: var(--vt-c-white);
+}
+
+body.dark-theme {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+body.dark-theme .card {
+    background-color: var(--vt-c-black-soft);
+    border: none;
+}
+
+body.dark-theme input,
+body.dark-theme textarea {
+    background-color: var(--vt-c-black-mute);
+    color: var(--vt-c-white);
+}
+
+.card {
+    background-color: var(--vt-c-white-soft);
+    border-radius: 10px;
+    border: 0.1px solid rgb(231, 231, 231);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+}
+
+input {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgb(66, 66, 66);
+    background-color: var(--color-input-background);
+    color: var(--vt-c-black);
+}
+
+textarea {
+    background-color: var(--color-input-background);
+    color: var(--color-text);
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--vt-c-divider-light-1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 5px;
+}
+
+.modal-container {
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    background-color: var(--vt-c-white);
+}
+
+.nav-item {
+    color: var(--vt-c-black-mute);
+}
+
+body.dark-theme .nav-item {
+    color: var(--vt-c-white);
+}
+
+body.dark-theme .nav-item:hover,
+.nav-item:hover {
+    color: #94b181;
+    cursor: pointer;
+}
+
+.active-route {
+    color: #588d35;
+}
+
+body.dark-theme .active-route {
+    color: #588d35
+}
+
+body.dark-theme .modal-container {
+    background-color: var(--vt-c-black-soft);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --color-background: var(--vt-c-black);
         --color-background-soft: var(--vt-c-black-soft);
-        --color-background-mute: var(--vt-c-black-mute);
-
-        --color-border: var(--vt-c-divider-dark-2);
-        --color-border-hover: var(--vt-c-divider-dark-1);
-
-        --color-heading: var(--vt-c-text-dark-1);
-        --color-text: var(--vt-c-text-dark-2);
+        --color-text: var(--vt-c-white);
     }
 }
 

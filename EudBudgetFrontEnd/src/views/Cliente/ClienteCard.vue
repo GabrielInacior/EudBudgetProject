@@ -6,21 +6,23 @@
       <div class="client-phone">{{ cliente.telefone }}</div>
     </div>
 
-    <div class="row" style="width: 200px">
+    <div class="row align-center justify-center" style="width: 250px">
       <div class="column align-center">
         <div class="row text-md align-center justify-center">
-          Valor total<br />R$ {{ valorTotal.toFixed(2).replace('.', ',') }}
+          Valor total de serviços<br />R$ {{ cliente.totalServicos.toFixed(2).replace('.', ',') }}
         </div>
       </div>
       <div class="divider"></div>
       <div class="column">
         <div class="row">
-          <button class="mx-xs"><span class="bi bi-pencil"></span></button>
-          <button class="button-outline"><span class="bi bi-trash"></span></button>
+          <button @click="editCliente"><span class="bi bi-pencil"></span></button>
+          <button class="button-outline mx-sm" @click="deleteCliente">
+            <span class="bi bi-trash"></span>
+          </button>
         </div>
         <div class="row mt-sm">
-          <button class="button-outline" @click="goServicos">
-            <span class="text-sm"> Adicionar Serviço</span>
+          <button class="button-outline" @click="goServicos" style="width: 90px">
+            <span class="text-sm">Adicionar Serviço</span>
           </button>
         </div>
       </div>
@@ -29,10 +31,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, onMounted } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { useRouter } from 'vue-router'
 import ClienteEntity from '@/entity/ClienteEntity'
-import api from '@/api' // Importar seu arquivo de configuração da API
+import api from '@/api'
 
 export default defineComponent({
   name: 'ClienteCard',
@@ -42,9 +44,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const router = useRouter()
-    const valorTotal = ref(0)
 
     const goServicos = () => {
       router.push({
@@ -53,23 +54,23 @@ export default defineComponent({
       })
     }
 
-    const fetchValorTotal = async () => {
+    const editCliente = () => {
+      emit('edit-client', props.cliente) // Passa o cliente completo para o modal
+    }
+
+    const deleteCliente = async () => {
       try {
-        const response = await api.get(`/servicos?clienteId=${props.cliente.id}`) // Ajuste a rota conforme necessário
-        const servicos = response.data
-        valorTotal.value = servicos.reduce((total, servico) => total + servico.valor, 0)
+        await api.delete(`/clientes/cliente-delete-cliente/${props.cliente.id}`)
+        emit('cliente-deleted', props.cliente.id)
       } catch (error) {
-        console.error('Error fetching services:', error)
+        console.error('Error deleting client:', error)
       }
     }
 
-    onMounted(() => {
-      fetchValorTotal()
-    })
-
     return {
       goServicos,
-      valorTotal
+      deleteCliente,
+      editCliente
     }
   }
 })
@@ -92,6 +93,6 @@ export default defineComponent({
 .divider {
   border-right: 1px solid rgb(102, 102, 102);
   height: 100%;
-  margin: 0 15px 0 15px;
+  margin: 0 15px;
 }
 </style>

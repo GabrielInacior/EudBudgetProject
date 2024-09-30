@@ -1,6 +1,5 @@
 <template>
   <div class="column">
-    <!-- Loading Overlay -->
     <div v-if="isLoading" class="loading-overlay">
       <img src="../../assets/img/loading.svg" alt="Loading..." class="loading-icon" />
     </div>
@@ -8,7 +7,7 @@
     <div class="row">
       <div
         class="card row justify-space-between align-center"
-        style="height: 100px; border-bottom: 5px solid #6290c3"
+        style="height: 100px; border-bottom: 5px solid var(--lucro-color)"
       >
         <div class="row">
           <button class="button-outline" @click="back">
@@ -17,35 +16,42 @@
           <div class="text-lg text-bold">Serviços: {{ clienteNome }}</div>
         </div>
 
-        <button @click="openModal">
+        <button @click="openModal(null)">
           <span class="bi bi-plus-lg"></span>
         </button>
       </div>
       <CadastroServicos
         v-if="isModalVisible"
         @close="closeModal"
-        @service-saved="handleServiceSaved"
+        @servico-saved="handleServiceSaved"
+        :servicoId="selectedServicoId"
         :clienteId="Number(clienteId)"
       />
     </div>
 
-    <div
-      class="column client-cards-container mt-sm"
-      style="overflow-y: auto; overflow-x: hidden; max-height: 70vh; min-height: 70vh"
-    >
+    <div class="column service-cards-container mt-sm">
       <div class="row my-xs mx-sm" v-for="servico in servicos" :key="servico.id">
-        <ServicoCard :servico="servico" @service-deleted="handleServiceDeleted" />
+        <ServicoCard
+          :servico="servico"
+          @service-deleted="handleServiceDeleted"
+          @edit-service="openModal"
+        />
       </div>
     </div>
 
-    <div class="row justify-center card" style="border-top: 5px solid #6290c3">
-      <div class="text-md">Total em dinheiro:</div>
+    <div
+      class="row justify-center align-center card footer"
+      style="border-top: 5px solid var(--lucro-color)"
+    >
+      <div style="font-size: 1.2rem">
+        Total em dinheiro: R$ {{ totalValor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 import CadastroServicos from './CadastroServicos.vue'
 import ServicoCard from './ServicoCard.vue'
 import api from '@/api'
@@ -60,6 +66,7 @@ export default defineComponent({
   },
   setup() {
     const isModalVisible = ref(false)
+    const selectedServicoId = ref<number | null>(null)
     const servicos = ref<ServicoEntity[]>([])
     const route = useRoute()
     const router = useRouter()
@@ -71,13 +78,15 @@ export default defineComponent({
       router.push({ name: 'Clientes' })
     }
 
-    const openModal = () => {
+    const openModal = (servicoId: number | null) => {
+      selectedServicoId.value = servicoId
       isModalVisible.value = true
     }
 
     const closeModal = () => {
       isModalVisible.value = false
     }
+
     const handleServiceDeleted = (servicoId: number) => {
       servicos.value = servicos.value.filter((servico) => servico.id !== servicoId)
       fetchServicos()
@@ -88,7 +97,6 @@ export default defineComponent({
       try {
         const response = await api.get(`/servicos/cliente/${clienteId}`)
         servicos.value = response.data as ServicoEntity[]
-        console.log(servicos)
       } catch (error) {
         console.error('Error fetching services:', error)
       } finally {
@@ -101,8 +109,11 @@ export default defineComponent({
       closeModal()
     }
 
+    const totalValor = computed(() => {
+      return servicos.value.reduce((total, servico) => total + servico.valor, 0)
+    })
+
     onMounted(() => {
-      console.log(clienteNome)
       fetchServicos()
     })
 
@@ -110,16 +121,40 @@ export default defineComponent({
       openModal,
       closeModal,
       isModalVisible,
+      selectedServicoId,
       handleServiceDeleted,
       servicos,
       isLoading,
       handleServiceSaved,
       clienteId,
       clienteNome,
-      back
+      back,
+      totalValor
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.footer {
+  height: 13vh;
+  width: 99%;
+}
+
+.service-cards-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 72vh;
+  min-height: 72vh;
+}
+
+@media (min-width: 1600px) {
+  .footer {
+    height: 10vh;
+  }
+  .service-cards-container {
+    max-height: 79vh;
+    min-height: 79vh;
+  }
+}
+</style>

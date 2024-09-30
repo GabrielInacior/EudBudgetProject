@@ -3,12 +3,14 @@ import GastoRepository from "../Repository/GastoRepository";
 export default class GastoEntity {
   id: number;
   nome: string;
+  descricao: string;
   valor: number;
   data: Date;
 
   constructor(data: any) {
     this.id = data.id;
     this.nome = data.nome;
+    this.descricao = data.descricao;
     this.valor = data.valor;
     this.data = data.data;
   }
@@ -18,6 +20,7 @@ export default class GastoEntity {
       if (this.id) {
         const updated = await GastoRepository.updateGasto(this.id, {
           nome: this.nome,
+          descricao: this.descricao,
           valor: this.valor,
           data: this.data,
         });
@@ -25,6 +28,7 @@ export default class GastoEntity {
       } else {
         const created = await GastoRepository.createGasto({
           nome: this.nome,
+          descricao: this.descricao,
           valor: this.valor,
           data: this.data,
         });

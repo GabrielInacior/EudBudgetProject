@@ -1,7 +1,7 @@
 <template>
   <ModalComponent @close="handleClose" size="large">
     <template #header>
-      <h3>Cadastrar Cliente</h3>
+      <h3>{{ client.id ? 'Editar Cliente' : 'Cadastrar Cliente' }}</h3>
     </template>
 
     <template #default>
@@ -37,7 +37,7 @@
         <input
           id="endereco"
           v-model="client.endereco"
-          type="email"
+          type="text"
           :class="{ 'input-error': !isEnderecoValid }"
           required
         />
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
 import api from '@/api'
 import ModalComponent from '../../components/Modal.vue'
 import ClienteEntity from '@/entity/ClienteEntity'
@@ -65,9 +65,27 @@ export default defineComponent({
   components: {
     ModalComponent
   },
+  props: {
+    clienteId: {
+      type: Number,
+      required: false,
+      default: null
+    }
+  },
   emits: ['close', 'client-saved'],
   setup(props, { emit }) {
-    const client = ref({ name: '', endereco: '', phone: '' })
+    const client = ref<{ id: number | null; name: string; endereco: string; phone: string }>({
+      id: null,
+      name: '',
+      endereco: '',
+      phone: ''
+    })
+
+    onMounted(() => {
+      if (props.clienteId) {
+        handleOpen(props.clienteId)
+      }
+    })
 
     const isNameValid = computed(() => !!client.value.name)
     const isEnderecoValid = computed(() => !!client.value.endereco)
@@ -93,18 +111,20 @@ export default defineComponent({
     const saveClient = async () => {
       if (!isFormValid.value) return
 
-      try {
-        const clienteEntity = new ClienteEntity({
-          nome: client.value.name,
-          telefone: client.value.phone,
-          endereco: client.value.endereco
-        })
+      const clienteEntity = new ClienteEntity({
+        nome: client.value.name,
+        telefone: client.value.phone,
+        endereco: client.value.endereco
+      })
 
-        console.log(clienteEntity)
-        await api.post('/clientes/cliente-create-cliente', clienteEntity)
+      try {
+        if (client.value.id) {
+          await api.put(`/clientes/cliente-update-cliente/${client.value.id}`, clienteEntity)
+        } else {
+          await api.post('/clientes/cliente-create-cliente', clienteEntity)
+        }
         emit('client-saved', clienteEntity)
-        resetForm()
-        emit('close')
+        handleClose()
       } catch (error) {
         console.error('Erro ao salvar cliente:', error)
       }
@@ -116,7 +136,21 @@ export default defineComponent({
     }
 
     const resetForm = () => {
-      client.value = { name: '', endereco: '', phone: '' }
+      client.value = { id: null, name: '', endereco: '', phone: '' }
+    }
+
+    const handleOpen = async (clienteId: number) => {
+      try {
+        const response = await api.get(`/clientes/cliente-get-cliente-by-id/${clienteId}`)
+        client.value = {
+          id: response.data.id,
+          name: response.data.nome,
+          endereco: response.data.endereco,
+          phone: response.data.telefone
+        }
+      } catch (error) {
+        console.error('Erro ao buscar cliente:', error)
+      }
     }
 
     return {
@@ -155,6 +189,6 @@ input {
 .error-message {
   color: red;
   font-size: 12px;
-  margin-top: px;
+  margin-top: 5px; /* Ajuste para melhor visualização */
 }
 </style>

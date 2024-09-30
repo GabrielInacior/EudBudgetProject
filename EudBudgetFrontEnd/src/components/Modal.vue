@@ -69,13 +69,6 @@ export default defineComponent({
   z-index: 1000;
 }
 
-.modal-container {
-  background-color: white;
-  border-radius: 8px;
-  padding: 16px;
-  position: relative;
-}
-
 .modal-header {
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 8px;
@@ -101,19 +94,8 @@ export default defineComponent({
   width: 800px;
 }
 
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #1a1b41; /* Cor do texto */
-  padding: 5px; /* Espaçamento em torno do botão */
-}
-
 .modal-close:hover {
-  color: #c2e7da; /* Cor ao passar o mouse */
+  color: #ffffff; /* Cor ao passar o mouse */
+  background-color: #919191;
 }
 </style>

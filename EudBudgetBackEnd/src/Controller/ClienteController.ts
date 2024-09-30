@@ -3,6 +3,7 @@ import ClienteEntity from "../Entity/ClienteEntity";
 
 export async function getAllClientes(req: Request, res: Response) {
   try {
+    const { filtro } = req.params;
     const clientes = await ClienteEntity.getAllClientes();
     res.status(200).json(clientes);
   } catch (error) {

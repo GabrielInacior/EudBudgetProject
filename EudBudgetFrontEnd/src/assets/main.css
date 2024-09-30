@@ -83,6 +83,12 @@ input {
   justify-content: space-between;
 }
 
+.align-space-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .justify-space-around {
   justify-content: space-around;
 }
@@ -220,7 +226,7 @@ input {
 button {
   height: 35px;
   min-width: 35px;
-  background-color: #6290c3;
+  background-color: #588d35;
   color: white;
   border: none;
   font-weight: bold;
@@ -234,14 +240,53 @@ button {
   text-align: center;
 }
 
+button:hover {
+  background-color: #417022;
+}
+
 .button-outline {
   background-color: transparent;
-  /* Fundo transparente */
-  color: #6290c3;
-  /* Cor do texto igual à do botão normal */
-  border: 2px solid #6290c3;
-  /* Borda com a mesma cor do fundo do botão normal */
+  color: #588d35;
+  border: 2px solid #588d35;
   font-weight: bold;
+}
+
+.button-outline:hover {
+  background-color: #4b77a8;
+  color: white;
+}
+
+.button-gasto {
+  height: 35px;
+  min-width: 35px;
+  background-color: #e60000;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.button-gasto-outline {
+  background-color: transparent;
+  color: #e60000;
+  border: 2px solid #e60000;
+  font-weight: bold;
+}
+
+.button-gasto:hover {
+  background-color: #b30101;
+}
+
+.button-gasto-outline:hover {
+  background-color: #b30101;
+  color: white;
 }
 
 .card {

@@ -3,8 +3,23 @@ import ClienteEntity from "../Entity/ClienteEntity";
 
 export default class ClienteRepository {
   static async getAllClientes(): Promise<ClienteEntity[]> {
-    const clientes = await prisma.cliente.findMany();
-    return clientes.map((cliente) => new ClienteEntity(cliente));
+    const clientes = await prisma.cliente.findMany({
+      include: {
+        servicos: {
+          select: {
+            valor: true,
+          },
+        },
+      },
+    });
+
+    return clientes.map((cliente) => {
+      const totalServicos = cliente.servicos.reduce(
+        (sum, servico) => sum + servico.valor,
+        0
+      );
+      return new ClienteEntity({ ...cliente, totalServicos });
+    });
   }
 
   static async getClienteById(id: number): Promise<ClienteEntity | null> {
