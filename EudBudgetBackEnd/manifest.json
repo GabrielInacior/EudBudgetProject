@@ -1,0 +1,110 @@
+{
+  "routes": [
+    {
+      "path": "/clientes/cliente-get-clientes",
+      "method": "GET",
+      "controller": "ClienteController",
+      "action": "getAllClientes",
+      "name": "cliente-get-clientes"
+    },
+    {
+      "path": "/clientes/cliente-get-cliente-by-id/:id",
+      "method": "GET",
+      "controller": "ClienteController",
+      "action": "getClienteById",
+      "name": "cliente-get-cliente-by-id"
+    },
+    {
+      "path": "/clientes/cliente-create-cliente",
+      "method": "POST",
+      "controller": "ClienteController",
+      "action": "createCliente",
+      "name": "cliente-create-cliente"
+    },
+    {
+      "path": "/clientes/cliente-update-cliente/:id",
+      "method": "PUT",
+      "controller": "ClienteController",
+      "action": "updateCliente",
+      "name": "cliente-update-cliente"
+    },
+    {
+      "path": "/clientes/cliente-delete-cliente/:id",
+      "method": "DELETE",
+      "controller": "ClienteController",
+      "action": "deleteCliente",
+      "name": "cliente-delete-cliente"
+    },
+    {
+      "path": "/servicos/cliente/:clienteId",
+      "method": "GET",
+      "controller": "ServicoController",
+      "action": "getServicosByClienteId",
+      "name": "servico-get-servicos-by-client-id"
+    },
+
+    {
+      "path": "/servicos/servico-get-servico-by-id/:id",
+      "method": "GET",
+      "controller": "ServicoController",
+      "action": "getServicoById",
+      "name": "servico-get-servico-by-id"
+    },
+    {
+      "path": "/servicos/servico-create-servico",
+      "method": "POST",
+      "controller": "ServicoController",
+      "action": "createServico",
+      "name": "servico-create-servico"
+    },
+    {
+      "path": "/servicos/servico-update-servico/:id",
+      "method": "PUT",
+      "controller": "ServicoController",
+      "action": "updateServico",
+      "name": "servico-update-servico"
+    },
+    {
+      "path": "/servicos/servico-delete-servico/:id",
+      "method": "DELETE",
+      "controller": "ServicoController",
+      "action": "deleteServico",
+      "name": "servico-delete-servico"
+    },
+    {
+      "path": "/gastos/gasto-get-gastos",
+      "method": "GET",
+      "controller": "GastoController",
+      "action": "getAllGastos",
+      "name": "gasto-get-gastos"
+    },
+    {
+      "path": "/gastos/gasto-get-gasto-by-id/:id",
+      "method": "GET",
+      "controller": "GastoController",
+      "action": "getGastoById",
+      "name": "gasto-get-gasto-by-id"
+    },
+    {
+      "path": "/gastos/gasto-create-gasto",
+      "method": "POST",
+      "controller": "GastoController",
+      "action": "createGasto",
+      "name": "gasto-create-gasto"
+    },
+    {
+      "path": "/gastos/gasto-update-gasto/:id",
+      "method": "PUT",
+      "controller": "GastoController",
+      "action": "updateGasto",
+      "name": "gasto-update-gasto"
+    },
+    {
+      "path": "/gastos/gasto-delete-gasto/:id",
+      "method": "DELETE",
+      "controller": "GastoController",
+      "action": "deleteGasto",
+      "name": "gasto-delete-gasto"
+    }
+  ]
+}
