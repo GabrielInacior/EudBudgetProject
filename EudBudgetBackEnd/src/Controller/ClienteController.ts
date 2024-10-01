@@ -12,6 +12,21 @@ export async function getAllClientes(req: Request, res: Response) {
   }
 }
 
+export async function getClientesByFilters(req: Request, res: Response) {
+  const { nome } = req.query;
+
+  try {
+    const servicos = await ClienteEntity.getClientesByFilters({
+      nome: nome ? String(nome) : null,
+    });
+
+    res.status(200).json(servicos);
+  } catch (error) {
+    console.error("Error getting services:", error);
+    res.status(500).json({ message: "Error getting services" });
+  }
+}
+
 export async function getClienteById(req: Request, res: Response) {
   const { id } = req.params;
   try {

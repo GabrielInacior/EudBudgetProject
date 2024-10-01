@@ -40,6 +40,56 @@ export default class ServicoEntity {
     }
   }
 
+  static async getServicosByDateRange(
+    startDate: Date,
+    endDate: Date,
+    clienteId: number
+  ) {
+    const servicos = await ServicoRepository.getServicosByDateRange(
+      startDate,
+      endDate,
+      clienteId
+    );
+    return servicos.map((servico) => new ServicoEntity(servico));
+  }
+
+  static async getAllServicosByFilters({
+    startDate,
+    endDate,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    nome?: string | null;
+  }): Promise<ServicoEntity[]> {
+    const servicos = await ServicoRepository.getAllServicosByFilters({
+      startDate,
+      endDate,
+      nome,
+    });
+    return servicos.map((servico) => new ServicoEntity(servico));
+  }
+
+  static async getServicosByFilters({
+    startDate,
+    endDate,
+    clienteId,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    clienteId: number;
+    nome?: string | null;
+  }): Promise<ServicoEntity[]> {
+    const servicos = await ServicoRepository.getServicosByFilters({
+      startDate,
+      endDate,
+      clienteId,
+      nome,
+    });
+    return servicos.map((servico) => new ServicoEntity(servico));
+  }
+
   static async getServicosByClienteId(
     clienteId: number
   ): Promise<ServicoEntity[]> {

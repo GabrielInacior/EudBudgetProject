@@ -144,7 +144,7 @@ export default defineComponent({
       if (!isFormValid.value) return
 
       try {
-        const formattedData = new Date(gasto.value.data).toISOString()
+        const formattedData = new Date(gasto.value.data + 'T12:00:00').toISOString()
 
         if (gasto.value.id) {
           await api.put(`/gastos/gasto-update-gasto/${gasto.value.id}`, {

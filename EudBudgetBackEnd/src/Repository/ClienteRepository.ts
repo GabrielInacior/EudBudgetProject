@@ -22,6 +22,40 @@ export default class ClienteRepository {
     });
   }
 
+  static async getClientesByFilters({
+    nome,
+  }: {
+    nome?: string | null;
+  }): Promise<ClienteEntity[]> {
+    const whereConditions: any = {};
+
+    if (nome) {
+      whereConditions.nome = {
+        contains: nome,
+        mode: "insensitive",
+      };
+    }
+
+    const clientes = await prisma.cliente.findMany({
+      where: whereConditions,
+      include: {
+        servicos: {
+          select: {
+            valor: true,
+          },
+        },
+      },
+    });
+
+    return clientes.map((cliente) => {
+      const totalServicos = cliente.servicos.reduce(
+        (sum, servico) => sum + servico.valor,
+        0
+      );
+      return new ClienteEntity({ ...cliente, totalServicos });
+    });
+  }
+
   static async getClienteById(id: number): Promise<ClienteEntity | null> {
     const cliente = await prisma.cliente.findUnique({
       where: { id },

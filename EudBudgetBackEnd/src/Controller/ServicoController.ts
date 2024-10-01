@@ -14,6 +14,69 @@ export async function getServicosByClienteId(req: Request, res: Response) {
   }
 }
 
+export async function getServicosByFilters(req: Request, res: Response) {
+  const { startDate, endDate, clienteId, nome } = req.query;
+
+  try {
+    const start = startDate ? new Date(String(startDate)) : null;
+    const end = endDate ? new Date(String(endDate)) : null;
+
+    const servicos = await ServicoEntity.getServicosByFilters({
+      startDate: start,
+      endDate: end,
+      clienteId: Number(clienteId),
+      nome: nome ? String(nome) : null, // garante que nome seja null se não estiver presente
+    });
+
+    res.status(200).json(servicos);
+  } catch (error) {
+    console.error("Error getting services:", error);
+    res.status(500).json({ message: "Error getting services" });
+  }
+}
+
+export async function getAllServicosByFilters(req: Request, res: Response) {
+  const { startDate, endDate, nome } = req.query;
+
+  try {
+    const start = startDate ? new Date(String(startDate)) : null;
+    const end = endDate ? new Date(String(endDate)) : null;
+
+    const servicos = await ServicoEntity.getAllServicosByFilters({
+      startDate: start,
+      endDate: end,
+      nome: nome ? String(nome) : null,
+    });
+
+    res.status(200).json(servicos);
+  } catch (error) {
+    console.error("Error getting services:", error);
+    res.status(500).json({ message: "Error getting services" });
+  }
+}
+
+export async function getServicosByDateRange(req: Request, res: Response) {
+  const { startDate, endDate, clienteId } = req.query;
+
+  try {
+    const start = startDate ? new Date(String(startDate)) : null;
+    const end = endDate ? new Date(String(endDate)) : null;
+
+    if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ message: "Datas inválidas fornecidas" });
+    }
+
+    const servicos = await ServicoEntity.getServicosByDateRange(
+      start,
+      end,
+      Number(clienteId)
+    );
+    res.status(200).json(servicos);
+  } catch (error) {
+    console.error("Error getting services by date range:", error);
+    res.status(500).json({ message: "Error getting services by date range" });
+  }
+}
 export async function getServicoById(req: Request, res: Response) {
   const { id } = req.params;
   try {

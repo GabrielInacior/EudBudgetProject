@@ -3,7 +3,60 @@ import GastoEntity from "../Entity/GastoEntity";
 
 export default class GastoRepository {
   static async getAllGastos(): Promise<GastoEntity[]> {
-    const gastos = await prisma.gasto.findMany();
+    const gastos = await prisma.gasto.findMany({
+      orderBy: {
+        data: "desc",
+      },
+    });
+    return gastos.map((gasto) => new GastoEntity(gasto));
+  }
+
+  static async getGastosByDateRange(startDate: Date, endDate: Date) {
+    return await prisma.gasto.findMany({
+      where: {
+        data: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: {
+        data: "desc",
+      },
+    });
+  }
+
+  static async getGastosByFilters({
+    startDate,
+    endDate,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    nome?: string | null;
+  }): Promise<GastoEntity[]> {
+    const whereConditions: any = {};
+
+    if (startDate && endDate) {
+      whereConditions.data = {
+        gte: startDate,
+        lte: endDate,
+      };
+    }
+
+    if (nome) {
+      whereConditions.nome = {
+        contains: nome,
+        mode: "insensitive",
+      };
+    }
+
+    const gastos = await prisma.gasto.findMany({
+      where: whereConditions,
+      orderBy: {
+        data: "desc",
+      },
+    });
+
     return gastos.map((gasto) => new GastoEntity(gasto));
   }
 

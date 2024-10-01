@@ -47,6 +47,7 @@ body.dark-theme .card {
     border: none;
 }
 
+body.dark-theme select,
 body.dark-theme input,
 body.dark-theme textarea {
     background-color: var(--vt-c-black-mute);
@@ -69,11 +70,13 @@ input {
     color: var(--vt-c-black);
 }
 
+select,
 textarea {
     background-color: var(--color-input-background);
-    color: var(--color-text);
+    color: var(--vt-c-black);
 }
 
+select:focus,
 input:focus,
 textarea:focus {
     outline: none;
@@ -106,6 +109,7 @@ textarea:focus {
 body.dark-theme .nav-item {
     color: var(--vt-c-white);
 }
+
 
 body.dark-theme .nav-item:hover,
 .nav-item:hover {

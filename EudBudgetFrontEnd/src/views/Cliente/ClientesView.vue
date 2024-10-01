@@ -9,7 +9,20 @@
         class="card row justify-space-between align-center"
         style="height: 100px; border-bottom: 5px solid var(--lucro-color)"
       >
-        <div class="text-lg text-bold">Clientes</div>
+        <div class="row align-center">
+          <div class="text-lg text-bold mx-sm">Clientes</div>
+          <div class="column ml-lg" style="width: 200px">
+            <div class="text-md">Filtrar por nome:</div>
+            <input
+              type="text"
+              v-model="nomeFiltro"
+              @keyup.enter="applyFilter"
+              placeholder="Pesquisar (ENTER)"
+              class="filter-input"
+            />
+          </div>
+        </div>
+
         <button @click="openModal"><span class="bi bi-plus-lg"></span></button>
       </div>
 
@@ -21,7 +34,7 @@
       />
     </div>
 
-    <div class="column client-cards-container mt-sm">
+    <div class="column client-cards-container mt-sm" v-if="clientes.length > 0">
       <div class="row my-xs mx-sm" v-for="cliente in clientes" :key="cliente.id">
         <ClienteCard
           :cliente="cliente"
@@ -29,6 +42,13 @@
           @edit-client="openModalForEdit"
         />
       </div>
+    </div>
+    <div class="column align-center justify-center img-404" v-else>
+      <div v-if="isLoading" class="loading-overlay">
+        <img src="../../assets/img/loading.svg" alt="Loading..." class="loading-icon" />
+      </div>
+      <img src="../../assets/img/ClienteNot.svg" />
+      <div style="font-size: 1.3rem" class="text-bold">Ops! Nenhum cliente encontrado!</div>
     </div>
 
     <div class="row justify-center card footer" style="border-top: 5px solid var(--lucro-color)">
@@ -38,7 +58,7 @@
           class="text-bold"
           style="font-size: 2rem; margin-top: -0.5%; color: var(--lucro-color)"
         >
-          R$ {{ calcularTotal() }}
+          {{ calcularTotal() }}
         </div>
       </div>
     </div>
@@ -64,6 +84,7 @@ export default defineComponent({
     const clientes = ref<ClienteEntity[]>([])
     const isLoading = ref(false)
     const clienteEdit = ref<ClienteEntity | null>(null)
+    const nomeFiltro = ref('')
 
     const openModal = () => {
       isModalVisible.value = true
@@ -77,20 +98,27 @@ export default defineComponent({
 
     const handleClientSaved = (client: ClienteEntity) => {
       closeModal()
-      fetchClientes()
+      applyFilter()
     }
 
     const handleClienteDeleted = (clienteId: number) => {
       clientes.value = clientes.value.filter((cliente) => cliente.id !== clienteId)
     }
 
-    const fetchClientes = async () => {
+    const applyFilter = async () => {
       isLoading.value = true
+
+      const params: any = {}
+      if (nomeFiltro.value.trim()) {
+        params.nome = nomeFiltro.value
+      }
       try {
-        const response = await api.get('clientes/cliente-get-clientes')
+        const response = await api.get(`/clientes/cliente-get-clientes-by-filters`, {
+          params
+        })
         clientes.value = response.data as ClienteEntity[]
       } catch (error) {
-        console.error('Error fetching clients:', error)
+        console.error('Error filtering clients:', error)
       } finally {
         isLoading.value = false
       }
@@ -103,25 +131,30 @@ export default defineComponent({
     }
 
     const calcularTotal = () => {
-      return clientes.value.reduce((total, cliente) => total + (cliente.totalServicos || 0), 0)
+      const total = clientes.value.reduce(
+        (total, cliente) => total + (cliente.totalServicos || 0),
+        0
+      )
+      return total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     }
 
     onMounted(() => {
-      fetchClientes()
+      applyFilter()
     })
 
     return {
       openModal,
       closeModal,
       handleClientSaved,
-      fetchClientes,
       isModalVisible,
       clientes,
       isLoading,
       clienteEdit,
       openModalForEdit,
       handleClienteDeleted,
-      calcularTotal
+      calcularTotal,
+      nomeFiltro,
+      applyFilter
     }
   }
 })
@@ -143,6 +176,9 @@ export default defineComponent({
 @media (min-width: 1600px) {
   .footer {
     height: 10vh;
+  }
+  .img-404 {
+    height: 79vh;
   }
   .client-cards-container {
     max-height: 79vh;

@@ -6,21 +6,21 @@
     <div class="so-column align-space-between" style="height: 90vh">
       <div class="so-column">
         <div
-          class="nav-item text-md text-bold mx-sm"
+          class="nav-item text-md text-bold mx-sm my-md"
           :class="{ 'active-route': isActive('/') }"
           @click="navigateTo('/')"
         >
           Home
         </div>
         <div
-          class="nav-item text-md text-bold mx-sm"
+          class="nav-item text-md text-bold mx-sm my-md"
           :class="{ 'active-route': isActive('/cliente') }"
           @click="navigateTo('/cliente')"
         >
           Clientes
         </div>
         <div
-          class="nav-item text-md text-bold mx-sm"
+          class="nav-item text-md text-bold mx-sm my-md"
           :class="{ 'active-route': isActive('/gastos') }"
           @click="navigateTo('/gastos')"
         >

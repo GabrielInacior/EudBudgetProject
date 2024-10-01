@@ -40,6 +40,31 @@ export default class GastoEntity {
     }
   }
 
+  static async getGastosByFilters({
+    startDate,
+    endDate,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    nome?: string | null;
+  }): Promise<GastoEntity[]> {
+    const servicos = await GastoRepository.getGastosByFilters({
+      startDate,
+      endDate,
+      nome,
+    });
+    return servicos.map((gasto) => new GastoEntity(gasto));
+  }
+
+  static async getGastosByDateRange(startDate: Date, endDate: Date) {
+    const gastos = await GastoRepository.getGastosByDateRange(
+      startDate,
+      endDate
+    );
+    return gastos.map((gasto) => new GastoEntity(gasto));
+  }
+
   static async getAllGastos(): Promise<GastoEntity[]> {
     try {
       const gastos = await GastoRepository.getAllGastos();

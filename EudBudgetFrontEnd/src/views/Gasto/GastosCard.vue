@@ -3,6 +3,7 @@
     <div class="gasto-info">
       <div class="gasto-name">{{ gasto.nome }}</div>
       <div class="gasto-description text-light">{{ gasto.descricao }}</div>
+      <div class="servico-data">{{ formatData(String(gasto.data)) }}</div>
       <div class="gasto-valor">R$ {{ gasto.valor.toFixed(2).replace('.', ',') }}</div>
     </div>
 
@@ -49,9 +50,16 @@ export default defineComponent({
       }
     }
 
+    const formatData = (data: string): string => {
+      const date = new Date(data)
+      const options: Intl.DateTimeFormatOptions = { day: '2-digit', year: 'numeric', month: 'long' }
+      return date.toLocaleDateString('pt-BR', options).replace(',', '')
+    }
+
     return {
       deleteGasto,
-      editGasto
+      editGasto,
+      formatData
     }
   }
 })

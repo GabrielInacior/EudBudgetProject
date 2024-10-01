@@ -117,7 +117,6 @@ input {
   align-items: flex-end;
 }
 
-/* Margem */
 .m-0 {
   margin: 0;
 }
@@ -142,18 +141,23 @@ input {
   margin: 32px;
 }
 
+/* Margens horizontais */
 .mx-xs {
   margin-left: 4px;
   margin-right: 4px;
 }
 
+.img-404 {
+  height: 72vh;
+}
+
+.img-404 img {
+  width: 30%;
+}
+
 .mx-sm {
   margin-left: 8px;
   margin-right: 8px;
-}
-
-.mt-sm {
-  margin-top: 4px;
 }
 
 .mx-md {
@@ -171,6 +175,7 @@ input {
   margin-right: 32px;
 }
 
+/* Margens verticais */
 .my-xs {
   margin-top: 4px;
   margin-bottom: 4px;
@@ -196,31 +201,110 @@ input {
   margin-bottom: 32px;
 }
 
+/* Margem esquerda isolada */
+.ml-xs {
+  margin-left: 4px;
+}
+
+.ml-sm {
+  margin-left: 8px;
+}
+
+.ml-md {
+  margin-left: 16px;
+}
+
+.ml-lg {
+  margin-left: 24px;
+}
+
+.ml-xl {
+  margin-left: 32px;
+}
+
+/* Margem direita isolada */
+.mr-xs {
+  margin-right: 4px;
+}
+
+.mr-sm {
+  margin-right: 8px;
+}
+
+.mr-md {
+  margin-right: 16px;
+}
+
+.mr-lg {
+  margin-right: 24px;
+}
+
+.mr-xl {
+  margin-right: 32px;
+}
+
+/* Margem superior isolada */
+.mt-xs {
+  margin-top: 4px;
+}
+
+.mt-sm {
+  margin-top: 8px;
+}
+
+.mt-md {
+  margin-top: 16px;
+}
+
+.mt-lg {
+  margin-top: 24px;
+}
+
+.mt-xl {
+  margin-top: 32px;
+}
+
+/* Margem inferior isolada */
+.mb-xs {
+  margin-bottom: 4px;
+}
+
+.mb-sm {
+  margin-bottom: 8px;
+}
+
+.mb-md {
+  margin-bottom: 16px;
+}
+
+.mb-lg {
+  margin-bottom: 24px;
+}
+
+.mb-xl {
+  margin-bottom: 32px;
+}
+
+
 /* Texto */
 .text-xs {
   font-size: 10px;
-  margin: 4px;
 }
 
 .text-sm {
   font-size: 12px;
-  margin: 8px;
 }
 
 .text-md {
   font-size: 15px;
-  margin: 16px;
 }
 
 .text-lg {
   font-size: 18px;
-  margin: 24px;
 }
 
 .text-xl {
   font-size: 22px;
-
-  margin: 32px;
 }
 
 button {
@@ -252,7 +336,7 @@ button:hover {
 }
 
 .button-outline:hover {
-  background-color: #4b77a8;
+  background-color: #417022;
   color: white;
 }
 

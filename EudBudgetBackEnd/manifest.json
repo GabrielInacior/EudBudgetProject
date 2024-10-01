@@ -105,6 +105,48 @@
       "controller": "GastoController",
       "action": "deleteGasto",
       "name": "gasto-delete-gasto"
+    },
+    {
+      "path": "/servicos/servico-get-servicos-by-date",
+      "method": "GET",
+      "controller": "ServicoController",
+      "action": "getServicosByDateRange",
+      "name": "servico-get-servicos-by-date"
+    },
+    {
+      "path": "/gastos/gasto-get-gastos-by-date",
+      "method": "GET",
+      "controller": "GastoController",
+      "action": "getGastosByDateRange",
+      "name": "gasto-get-gastos-by-date"
+    },
+    {
+      "path": "/clientes/cliente-get-clientes-by-filters",
+      "method": "GET",
+      "controller": "ClienteController",
+      "action": "getClientesByFilters",
+      "name": "cliente-get-clientes-by-filters"
+    },
+    {
+      "path": "/servicos/servico-get-servicos-by-filters",
+      "method": "GET",
+      "controller": "ServicoController",
+      "action": "getServicosByFilters",
+      "name": "servico-get-servicos-by-filters"
+    },
+    {
+      "path": "/servicos/servico-get-all-servicos-by-filters",
+      "method": "GET",
+      "controller": "ServicoController",
+      "action": "getAllServicosByFilters",
+      "name": "servico-get-all-servicos-by-filters"
+    },
+    {
+      "path": "/gastos/gasto-get-gastos-by-filters",
+      "method": "GET",
+      "controller": "GastoController",
+      "action": "getGastosByFilters",
+      "name": "gasto-get-gastos-by-filters"
     }
   ]
 }

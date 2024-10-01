@@ -113,7 +113,7 @@ export default defineComponent({
       try {
         const servicoEntity = new ServicoEntity({
           nome: servico.value.nome,
-          data: new Date(servico.value.data).toISOString(),
+          data: new Date(servico.value.data + 'T12:00:00').toISOString(),
           valor: servico.value.valor,
           clienteId: props.clienteId
         })

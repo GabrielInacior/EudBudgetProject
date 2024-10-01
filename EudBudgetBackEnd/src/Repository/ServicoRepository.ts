@@ -7,10 +7,101 @@ export default class ServicoRepository {
   ): Promise<ServicoEntity[]> {
     const servicos = await prisma.servico.findMany({
       where: { clienteId },
+      orderBy: {
+        data: "desc",
+      },
     });
     return servicos.map((servico) => new ServicoEntity(servico));
   }
 
+  static async getServicosByFilters({
+    startDate,
+    endDate,
+    clienteId,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    clienteId: number;
+    nome?: string | null;
+  }): Promise<ServicoEntity[]> {
+    const whereConditions: any = {
+      clienteId,
+    };
+
+    if (startDate && endDate) {
+      whereConditions.data = {
+        gte: startDate,
+        lte: endDate,
+      };
+    }
+
+    if (nome) {
+      whereConditions.nome = {
+        contains: nome,
+        mode: "insensitive",
+      };
+    }
+
+    const servicos = await prisma.servico.findMany({
+      where: whereConditions,
+      orderBy: {
+        data: "desc",
+      },
+    });
+
+    return servicos.map((servico) => new ServicoEntity(servico));
+  }
+
+  static async getAllServicosByFilters({
+    startDate,
+    endDate,
+    nome,
+  }: {
+    startDate?: Date | null;
+    endDate?: Date | null;
+    nome?: string | null;
+  }): Promise<ServicoEntity[]> {
+    const whereConditions: any = {};
+
+    if (startDate && endDate) {
+      whereConditions.data = {
+        gte: startDate,
+        lte: endDate,
+      };
+    }
+
+    if (nome) {
+      whereConditions.nome = {
+        contains: nome,
+        mode: "insensitive",
+      };
+    }
+
+    const servicos = await prisma.servico.findMany({
+      where: whereConditions,
+      orderBy: {
+        data: "desc",
+      },
+    });
+
+    return servicos.map((servico) => new ServicoEntity(servico));
+  }
+
+  static async getServicosByDateRange(
+    startDate: Date,
+    endDate: Date,
+    clienteId: number
+  ) {
+    return await prisma.servico.findMany({
+      where: {
+        data: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+  }
   static async getServicoById(id: number): Promise<ServicoEntity | null> {
     const servico = await prisma.servico.findUnique({
       where: { id },

@@ -9,8 +9,33 @@
         class="card row justify-space-between align-center"
         style="height: 100px; border-bottom: 5px solid var(--gasto-color)"
       >
-        <div class="text-lg text-bold">Gastos</div>
-        <button @click="openModal" class="button-gasto"><span class="bi bi-plus-lg"></span></button>
+        <div class="text-lg text-bold mr-sm">Gastos</div>
+
+        <div class="row align-center ml-md">
+          <div class="column" style="width: 200px">
+            <div class="text-md">Filtrar por nome:</div>
+            <input
+              type="text"
+              v-model="nomeFiltro"
+              @keyup.enter="applyFilter"
+              placeholder="Pesquisar (ENTER)"
+              class="filter-input"
+            />
+          </div>
+          <div class="column mx-md" style="width: 150px">
+            <div class="text-md">Filtrar por data:</div>
+            <select v-model="selectedFilter" @change="applyFilter" class="filter-dropdown">
+              <option value="all">Todos</option>
+              <option value="today">Hoje</option>
+              <option value="lastMonth">Último mês</option>
+              <option value="lastYear">Último ano</option>
+            </select>
+          </div>
+        </div>
+
+        <button @click="openModal" class="button-gasto">
+          <span class="bi bi-plus-lg"></span>
+        </button>
       </div>
 
       <CadastroGastos
@@ -21,7 +46,7 @@
       />
     </div>
 
-    <div class="column gastos-cards-container mt-sm">
+    <div class="column gastos-cards-container mt-sm" v-if="gastos.length > 0">
       <div class="row my-xs mx-sm" v-for="gasto in gastos" :key="gasto.id">
         <GastosCard
           :gasto="gasto"
@@ -29,6 +54,13 @@
           @edit-gasto="openModalForEdit"
         />
       </div>
+    </div>
+    <div class="column align-center justify-center img-404" v-else>
+      <div v-if="isLoading" class="loading-overlay">
+        <img src="../../assets/img/loading.svg" alt="Loading..." class="loading-icon" />
+      </div>
+      <img src="../../assets/img/GastoNot.svg" />
+      <div style="font-size: 1.3rem" class="text-bold">Opa! Nenhum gasto encontrado!</div>
     </div>
 
     <div class="row justify-center card footer" style="border-top: 5px solid var(--gasto-color)">
@@ -64,6 +96,8 @@ export default defineComponent({
     const isLoading = ref(false)
     const gastoEdit = ref<GastoEntity | null>(null)
     const errorMessage = ref<string | null>(null)
+    const selectedFilter = ref('all')
+    const nomeFiltro = ref('')
 
     const openModal = () => {
       isModalVisible.value = true
@@ -77,22 +111,55 @@ export default defineComponent({
 
     const handleGastoSaved = (gasto: GastoEntity) => {
       closeModal()
-      fetchGastos()
+      applyFilter()
     }
 
     const handleGastoDeleted = (gastoId: number) => {
       gastos.value = gastos.value.filter((gasto) => gasto.id !== gastoId)
     }
 
-    const fetchGastos = async () => {
+    const applyFilter = async () => {
       isLoading.value = true
-      errorMessage.value = null
+      const now = new Date()
+
+      let startDate: Date | null = null
+      let endDate: Date | null = null
+
+      if (selectedFilter.value !== 'all') {
+        switch (selectedFilter.value) {
+          case 'today':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59)
+            break
+          case 'lastMonth':
+            startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+            endDate = new Date(now.getFullYear(), now.getMonth(), 0)
+            break
+          case 'lastYear':
+            startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate())
+            endDate = now
+            break
+        }
+      }
+
+      const params: any = {}
+
+      if (startDate && endDate) {
+        params.startDate = startDate.toISOString()
+        params.endDate = endDate.toISOString()
+      }
+
+      if (nomeFiltro.value.trim()) {
+        params.nome = nomeFiltro.value
+      }
+
       try {
-        const response = await api.get('gastos/gasto-get-gastos')
-        gastos.value = response.data.map((item: any) => new GastoEntity(item))
+        const response = await api.get(`/gastos/gasto-get-gastos-by-filters`, {
+          params
+        })
+        gastos.value = response.data as GastoEntity[]
       } catch (error) {
-        console.error('Error fetching gastos:', error)
-        errorMessage.value = 'Erro ao buscar os gastos. Tente novamente mais tarde.'
+        console.error('Error filtering services:', error)
       } finally {
         isLoading.value = false
       }
@@ -111,14 +178,14 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      fetchGastos()
+      applyFilter()
     })
 
     return {
       openModal,
       closeModal,
       handleGastoSaved,
-      fetchGastos,
+      applyFilter,
       isModalVisible,
       gastos,
       isLoading,
@@ -126,7 +193,9 @@ export default defineComponent({
       openModalForEdit,
       handleGastoDeleted,
       totalGasto,
-      errorMessage
+      selectedFilter,
+      errorMessage,
+      nomeFiltro
     }
   }
 })
@@ -137,6 +206,14 @@ export default defineComponent({
   border-top: 5px solid var(--gasto-color);
   height: 20vh;
   width: 99%;
+}
+
+.filter-dropdown {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid var(--gasto-color);
+  border-radius: 5px;
+  margin-right: 1rem;
 }
 
 .gastos-cards-container {

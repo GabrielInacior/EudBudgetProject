@@ -38,6 +38,17 @@ export default class ClienteEntity {
     }
   }
 
+  static async getClientesByFilters({
+    nome,
+  }: {
+    nome?: string | null;
+  }): Promise<ClienteEntity[]> {
+    const servicos = await ClienteRepository.getClientesByFilters({
+      nome,
+    });
+    return servicos.map((cliente) => new ClienteEntity(cliente));
+  }
+
   static async getAllClientes(): Promise<ClienteEntity[]> {
     try {
       const clientes = await ClienteRepository.getAllClientes();
