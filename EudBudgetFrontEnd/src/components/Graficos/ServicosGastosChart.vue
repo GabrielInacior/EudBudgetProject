@@ -91,7 +91,7 @@ export default defineComponent({
                 text: 'Serviços e Gastos',
                 color: textColor,
                 font: {
-                  size: 25
+                  size: 20
                 }
               }
             }

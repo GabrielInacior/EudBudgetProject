@@ -90,7 +90,7 @@ export default defineComponent({
               text: 'Evolução do Lucro',
               color: textColor,
               font: {
-                size: 25
+                size: 20
               }
             }
           },

@@ -95,7 +95,7 @@ export default defineComponent({
               color: textColor,
               text: 'Lucro e gasto',
               font: {
-                size: 25
+                size: 20
               }
             }
           },

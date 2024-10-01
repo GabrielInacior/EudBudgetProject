@@ -78,7 +78,7 @@ export default defineComponent({
               text: 'Proporção de Lucro e Gasto',
               color: textColor,
               font: {
-                size: 25
+                size: 20
               }
             }
           }

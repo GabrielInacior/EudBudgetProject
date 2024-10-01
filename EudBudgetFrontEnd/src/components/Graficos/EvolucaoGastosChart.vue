@@ -82,7 +82,7 @@ export default defineComponent({
               color: textColor,
               text: 'Evolução dos gastos',
               font: {
-                size: 25
+                size: 20
               }
             }
           },
